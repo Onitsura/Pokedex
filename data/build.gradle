@@ -4,6 +4,8 @@ plugins {
     id 'kotlin-kapt'
 }
 
+
+
 android {
     namespace 'com.example.data'
     compileSdk 33
@@ -46,6 +48,8 @@ dependencies {
 
     //Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+
+
 
     implementation project(path: ':domain')
 

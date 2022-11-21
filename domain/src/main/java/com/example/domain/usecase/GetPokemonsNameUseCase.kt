@@ -1,4 +1,6 @@
 package com.example.domain.usecase
 
-class GetPokemonsNameUseCase {
+import com.example.domain.repository.PokemonRepository
+
+class GetPokemonsNameUseCase(private val pokemonRepository: PokemonRepository) {
 }
