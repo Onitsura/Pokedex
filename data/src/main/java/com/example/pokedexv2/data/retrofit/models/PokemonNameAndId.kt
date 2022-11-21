@@ -1,4 +1,4 @@
-package com.example.pokedexv2.retrofit.models
+package com.example.pokedexv2.data.retrofit.models
 
 import com.google.gson.annotations.SerializedName
 

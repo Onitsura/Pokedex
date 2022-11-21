@@ -1,4 +1,4 @@
-package com.example.pokedexv2.retrofit
+package com.example.pokedexv2.data.retrofit
 
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
