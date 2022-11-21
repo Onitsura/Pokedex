@@ -1,12 +1,12 @@
 package com.example.domain.usecase
 
 import com.example.domain.models.PokemonDetails
-import com.example.domain.repository.PokemonDetailsRepository
+import com.example.domain.repository.PokemonRepository
 
-class GetPokemonDetailsByIdUseCase(private val pokemonDetailsRepository: PokemonDetailsRepository) {
+class GetPokemonDetailsByIdUseCase(private val pokemonRepository: PokemonRepository) {
 
     fun execute(id: Long): PokemonDetails{
-        return pokemonDetailsRepository.getDetailsById(id = id)
+        return pokemonRepository.getDetailsById(id = id)
     }
 
 }

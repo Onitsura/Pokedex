@@ -1,12 +1,12 @@
 package com.example.pokedexv2.data.repository
 
 import com.example.domain.models.PokemonDetails
-import com.example.domain.repository.PokemonDetailsRepository
+import com.example.domain.repository.PokemonRepository
 import com.example.pokedexv2.data.storage.PokemonStorage
 import com.example.pokedexv2.data.storage.models.StoragePokemonDetails
 
-class PokemonDetailsRepositoryImpl(private val pokemonStorage: PokemonStorage) :
-    PokemonDetailsRepository {
+class PokemonRepositoryImpl(private val pokemonStorage: PokemonStorage) :
+    PokemonRepository {
 
     override fun saveDetails(pokemonDetails: PokemonDetails) {
         pokemonStorage.saveAll(mapToStorage(pokemonDetails))
@@ -16,6 +16,12 @@ class PokemonDetailsRepositoryImpl(private val pokemonStorage: PokemonStorage) :
         val pokemon = pokemonStorage.getDetailsById(id = id)
         return mapToDomain(pokemon)
     }
+
+    override fun getNamesRemote(): List<String> {
+        return emptyList()
+    }
+
+
 
     private fun mapToDomain(storage: StoragePokemonDetails): PokemonDetails {
         return PokemonDetails(
