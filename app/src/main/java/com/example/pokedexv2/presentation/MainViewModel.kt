@@ -11,4 +11,12 @@ class MainViewModel @Inject constructor(
     val getPokemonsNameUseCase: GetPokemonsNameUseCase,
     val getPokemonDetailsByIdUseCase: GetPokemonDetailsByIdUseCase
 ) : ViewModel() {
+
+
+
+
+
+
+
+
 }
