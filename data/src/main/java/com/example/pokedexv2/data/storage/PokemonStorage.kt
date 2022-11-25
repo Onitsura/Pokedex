@@ -8,4 +8,5 @@ interface PokemonStorage {
 
     fun getDetailsById(id: Long): StoragePokemonDetails
 
+
 }

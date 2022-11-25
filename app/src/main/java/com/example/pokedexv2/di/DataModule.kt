@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.example.domain.repository.PokemonRepository
 import com.example.pokedexv2.data.repository.PokemonRepositoryImpl
+import com.example.pokedexv2.data.retrofit.RemoteDataSource
 import com.example.pokedexv2.data.room.RoomPokemonStorage
 import com.example.pokedexv2.data.room.database.AppDatabase
 import com.example.pokedexv2.data.storage.PokemonStorage
@@ -34,9 +35,11 @@ class DataModule {
 
     @Provides
     @Singleton
-    fun providePokemonRepository(pokemonStorage: PokemonStorage): PokemonRepository {
-        return PokemonRepositoryImpl(pokemonStorage = pokemonStorage)
+    fun providePokemonRepository(pokemonStorage: PokemonStorage, remoteDataSource: RemoteDataSource): PokemonRepository {
+        return PokemonRepositoryImpl(pokemonStorage = pokemonStorage, remoteDataSource = remoteDataSource)
     }
+
+
 
 
 }

@@ -4,27 +4,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.domain.models.PokemonDetails
 import com.example.pokedexv2.R
 import com.example.pokedexv2.databinding.PokemonItemBinding
-import com.squareup.picasso.Picasso
 
-class PokemonAdapter(private val pokemonList: ArrayList<PokemonDetails>, private val listener: PokemonListener) :
+class PokemonAdapter(private val pokemonList: MutableList<String>, private val listener: PokemonListener) :
     RecyclerView.Adapter<PokemonAdapter.PokemonHolder>() {
+
+    var pokemonListAdapter = pokemonList
 
 
     class PokemonHolder(item: View) : RecyclerView.ViewHolder(item) {
         val binding = PokemonItemBinding.bind(item)
 
-        fun bind(pokemon: PokemonDetails, listener: PokemonListener) {
+        fun bind(pokemon: String, listener: PokemonListener) {
             binding.apply {
-                tvName.text = pokemon.name
-                Picasso.get()
-                    .load(pokemon.urlAddress)
-                    .placeholder(R.drawable.pokepedia)
-                    .error(R.drawable.ic_launcher_background)
-                    .fit()
-                    .into(sprite)
+                tvName.text = pokemon
+//                Picasso.get()
+//                    .load(pokemon.urlAddress)
+//                    .placeholder(R.drawable.pokepedia)
+//                    .error(R.drawable.ic_launcher_background)
+//                    .fit()
+//                    .into(sprite)
                 itemView.setOnClickListener {
                     listener.onPokemonClicked(pokemon = pokemon)
                 }
@@ -47,12 +47,12 @@ class PokemonAdapter(private val pokemonList: ArrayList<PokemonDetails>, private
         return pokemonList.size
     }
 
-    fun addPokemon(pokemon: PokemonDetails) {
-        pokemonList.add(pokemon)
+    fun update(newPokemonList: MutableList<String>) {
+        pokemonListAdapter = newPokemonList
         notifyDataSetChanged()
     }
 
     interface PokemonListener{
-        fun onPokemonClicked(pokemon: PokemonDetails)
+        fun onPokemonClicked(pokemon: String)
     }
 }
