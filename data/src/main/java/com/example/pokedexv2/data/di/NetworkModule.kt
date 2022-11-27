@@ -18,7 +18,7 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideGson(): OkHttpClient{
+    fun provideClient(): OkHttpClient{
         return OkHttpClient()
     }
 

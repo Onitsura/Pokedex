@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.pokedexv2.R
 import com.example.pokedexv2.databinding.PokemonItemBinding
 
-class PokemonAdapter(private val pokemonList: MutableList<String>, private val listener: PokemonListener) :
+class PokemonAdapter(pokemonList: MutableList<String>, private val listener: PokemonListener) :
     RecyclerView.Adapter<PokemonAdapter.PokemonHolder>() {
 
     var pokemonListAdapter = pokemonList
@@ -40,17 +40,19 @@ class PokemonAdapter(private val pokemonList: MutableList<String>, private val l
     }
 
     override fun onBindViewHolder(holder: PokemonHolder, position: Int) {
-        holder.bind(pokemon = pokemonList[position], listener = listener)
+        holder.bind(pokemon = pokemonListAdapter[position], listener = listener)
     }
 
     override fun getItemCount(): Int {
-        return pokemonList.size
+        return pokemonListAdapter.size
     }
 
     fun update(newPokemonList: MutableList<String>) {
         pokemonListAdapter = newPokemonList
         notifyDataSetChanged()
     }
+
+
 
     interface PokemonListener{
         fun onPokemonClicked(pokemon: String)

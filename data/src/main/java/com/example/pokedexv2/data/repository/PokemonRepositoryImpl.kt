@@ -7,17 +7,14 @@ import com.example.pokedexv2.data.storage.PokemonStorage
 import com.example.pokedexv2.data.storage.models.StoragePokemonDetails
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
 import javax.inject.Inject
 
 class PokemonRepositoryImpl @Inject constructor(
     private val pokemonStorage: PokemonStorage,
-    remoteDataSource: RemoteDataSource
+    val remoteDataSource: RemoteDataSource
 ) :
     PokemonRepository {
-
-
-    override val pokemonDetailsFlow: Deferred<Flow<String>> = remoteDataSource.pokemonNames
-
 
     override fun saveDetails(pokemonDetails: PokemonDetails) {
         pokemonStorage.saveAll(mapToStorage(pokemonDetails))
@@ -28,9 +25,9 @@ class PokemonRepositoryImpl @Inject constructor(
         return mapToDomain(pokemon)
     }
 
-    override fun getNamesRemote(): List<String> {
+    override suspend fun getNamesRemote(): Flow<String> {
 
-        return emptyList()
+        return remoteDataSource.loadNames(remoteDataSource.apiService).asFlow()
 
 
     }

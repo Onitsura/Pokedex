@@ -6,11 +6,11 @@ import kotlinx.coroutines.flow.Flow
 
 interface PokemonRepository {
 
-    val pokemonDetailsFlow: Deferred<Flow<String>>
+//    val pokemonDetailsFlow: Flow<String>
 
     fun saveDetails(pokemonDetails: PokemonDetails)
 
     fun getDetailsById(id: Long): PokemonDetails
 
-    fun getNamesRemote(): List<String>
+    suspend fun getNamesRemote(): Flow<String>
 }

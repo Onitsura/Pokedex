@@ -1,183 +1,71 @@
 package com.example.pokedexv2.data.retrofit
 
 import android.util.Log
+import com.example.pokedexv2.data.retrofit.models.PokemonDetailsById
+import com.example.pokedexv2.data.retrofit.models.PokemonEntries
 import com.example.pokedexv2.data.retrofit.models.PokemonNameAndId
+import com.example.pokedexv2.data.storage.models.StoragePokemonDetails
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
-class RemoteDataSource @Inject constructor(apiService: ApiService) {
+class RemoteDataSource @Inject constructor(val apiService: ApiService) {
 
-    private val job = SupervisorJob()
-    private val scope = CoroutineScope(Dispatchers.Unconfined + job)
-    val names: MutableList<String> = mutableListOf()
+    private val idAll: MutableList<Long> = mutableListOf()
 
-    //TODO Поробовать обернуть создание флоу в лаунч и запускать флоу внутри лаунча с запросом в сеть??
-    val pokemonNames: Deferred<Flow<String>> = scope.async {
-        Log.e("Flow", "Load data has been started")
-        loadData(apiService, names)
-        Log.e("Flow", "Flow has been started")
-        flow {
 
-            delay(1_000)
-            emitAll(names.asFlow())
-            Log.e("Flow", "Flow is arrive")
+
+    suspend fun loadNames(apiService: ApiService): MutableList<String> {
+        val names: MutableList<String> = mutableListOf()
+        val receive: List<PokemonEntries> = (apiService.getNames().pokemon_entries)
+        receive.map {
+                names.add(it.species.name)
+                idAll.add(it.entry_number)
         }
-            .flowOn(Dispatchers.IO)
+        return names
     }
 
 
-    private fun getFlow(): Deferred<Flow<String>> = scope.async {
-
-        flow {
-
-            delay(1_000)
-            emitAll(names.asFlow())
-            Log.e("Flow", "Flow is arrive")
-        }
-            .flowOn(Dispatchers.IO)
-
-
-    }
-
-
-    private suspend fun doWork(apiService: ApiService, names: MutableList<String>): List<String> =
-        scope.async {
-
-            val pokemonDetails = apiService.getNames()
-            pokemonDetails.enqueue(object : Callback<PokemonNameAndId> {
-                override fun onResponse(
-                    call: Call<PokemonNameAndId>,
-                    response: Response<PokemonNameAndId>
-                ) {
-                    val allPoke = ArrayList(response.body()?.pokemon_entries!!)
-                    for (i in 0 until allPoke.size) {
-                        names.add(allPoke[i].species.name)
-                        names.sorted()
-                    }
-                    Log.e("Flow", "names uploaded1")
-
-                }
-
-
-                override fun onFailure(call: Call<PokemonNameAndId>, t: Throwable) {
-                    TODO("Not yet implemented")
-                }
-            })
-            return@async names.sorted()
-        }.await()
-
-    private suspend fun loadData(apiService: ApiService, names: MutableList<String>): Job =
-        scope.launch {
-            try {
-                doWork(apiService = apiService, names = names)
-            } catch (e: Exception) {
-
-            }
-        }
-
-
-    private suspend fun doWork2(apiService: ApiService, names: MutableList<String>): Job =
-        scope.launch {
-
-            val pokemonDetails = apiService.getNames()
-            pokemonDetails.enqueue(object : Callback<PokemonNameAndId> {
-                override fun onResponse(
-                    call: Call<PokemonNameAndId>,
-                    response: Response<PokemonNameAndId>
-                ) {
-
-                    val allPoke = ArrayList(response.body()?.pokemon_entries!!)
-                    for (i in 0 until allPoke.size) {
-                        names.add(allPoke[i].species.name)
-                        names.sorted()
-                    }
-                    Log.e("Flow", "names uploaded2")
-
-
-                }
-
-
-                override fun onFailure(call: Call<PokemonNameAndId>, t: Throwable) {
-                    TODO("Not yet implemented")
-                }
-            })
-            names.sorted()
-        }
-
-
-//    private suspend fun getNames(apiService: ApiService): List<String> = coroutineScope {
-//        val names = mutableListOf<String>()
-//        val pokemonDetails = apiService.getNames()
+  //    Метод для загрузки всех покемонов
+//    private suspend fun loadInfo(apiService: ApiService): HashMap<Long, StoragePokemonDetails> {
+//        val pokemonsList: HashMap<Long, StoragePokemonDetails> = hashMapOf()
+////        for (id in allId) {
 //
 //
-//        val sortedNames: Job = launch(Dispatchers.IO) {
-//
-//            pokemonDetails.enqueue(object : Callback<PokemonNameAndId>{
+//            val detailInfo = apiService.getDetailsById(id.toString())
+//            detailInfo.enqueue(object : Callback<PokemonDetailsById> {
 //                override fun onResponse(
-//                    call: Call<PokemonNameAndId>,
-//                    response: Response<PokemonNameAndId>
+//                    call: Call<PokemonDetailsById>,
+//                    response: Response<PokemonDetailsById>
 //                ) {
-//                    val allPoke = ArrayList(response.body()?.pokemon_entries!!)
-//                    for (i in 0 until allPoke.size) {
-//                        names.add(allPoke[i].species.name)
-//                        names.sorted()
-//                    }
-//                    Log.e("Flow", "names uploaded")
-//
+//                    val pokemon = StoragePokemonDetails(
+//                        id = id,
+//                        urlAddress = response.body()?.sprite?.front.toString(),
+//                        health = response.body()?.stats?.get(0)?.base_stat.toString(),
+//                        attack = response.body()?.stats?.get(1)?.base_stat.toString(),
+//                        experience = response.body()?.exp.toString(),
+//                        name = response.body()?.name.toString()
+//                            .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+//                    )
+//                    pokemonsList[id] = pokemon
 //                }
 //
-//
-//                override fun onFailure(call: Call<PokemonNameAndId>, t: Throwable) {
-//                    TODO("Not yet implemented")
+//                override fun onFailure(call: Call<PokemonDetailsById>, t: Throwable) {
 //                }
+//
 //            })
-//
-//
 //        }
-//
-//        sortedNames.join()
-//
-//
-//
-//        Log.e("Flow", names.size.toString())
-//        return@coroutineScope names
-//
-//
-//
-//
-//
-//
-//
-//    }
-
-//    val names: Deferred<List<String>> = GlobalScope.async {
-//        val names = mutableListOf<String>()
-//        val pokemonDetails = apiService.getNames()
-//        pokemonDetails.enqueue(object : Callback<PokemonNameAndId>{
-//            override fun onResponse(
-//                call: Call<PokemonNameAndId>,
-//                response: Response<PokemonNameAndId>
-//            ) {
-//                val allPoke = ArrayList(response.body()?.pokemon_entries!!)
-//                for (i in 0 until allPoke.size) {
-//                    names.add(allPoke[i].species.name)
-//                    names.sorted()
-//                }
-//                Log.e("Flow", "names uploaded")
-//
-//            }
-//
-//
-//            override fun onFailure(call: Call<PokemonNameAndId>, t: Throwable) {
-//                TODO("Not yet implemented")
-//            }
-//        })
-//        return@async names.sorted()
-//    }
-
+//        return pokemonsList
+//   }
 
 }
+
+
+
+

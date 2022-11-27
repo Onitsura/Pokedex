@@ -29,8 +29,8 @@ class DataModule {
 
     @Provides
     @Singleton
-    fun provideRoomPokemonStorage(database: AppDatabase): PokemonStorage {
-        return RoomPokemonStorage(database = database)
+    fun provideRoomPokemonStorage(database: AppDatabase, remoteDataSource: RemoteDataSource): PokemonStorage {
+        return RoomPokemonStorage(database = database, remoteDataSource = remoteDataSource)
     }
 
     @Provides

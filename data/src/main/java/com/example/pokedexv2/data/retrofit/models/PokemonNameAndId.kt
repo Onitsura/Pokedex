@@ -10,6 +10,8 @@ data class PokemonNameAndId(
 )
 
 data class PokemonEntries(
+    @SerializedName("entry_number")
+    val entry_number: Long,
     @SerializedName("pokemon_species")
     val species: PokemonName
 )

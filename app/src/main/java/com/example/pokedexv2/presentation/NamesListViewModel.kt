@@ -11,6 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
+import java.util.*
 import javax.inject.Inject
 import kotlin.coroutines.*
 
@@ -18,18 +19,30 @@ import kotlin.coroutines.*
 class NamesListViewModel @Inject constructor(private val getPokemonsNamesUseCase: GetPokemonsNamesUseCase, pokemonRepository: PokemonRepository) :
     ViewModel() {
 
-    val liveData: MutableLiveData<String> = MutableLiveData()
+    val allNames: MutableLiveData<MutableList<String>> = MutableLiveData(mutableListOf())
+    val namesLiveData: MutableLiveData<String> = MutableLiveData()
+
 
     init {
         viewModelScope.launch {
-            pokemonRepository.pokemonDetailsFlow.await().flowOn(Dispatchers.Default)
-                .collect { pokemonDetails ->
-                    liveData.value = pokemonDetails
-                    Log.e("Flow", "receive = $pokemonDetails")
+
+            pokemonRepository.getNamesRemote()
+                .flowOn(Dispatchers.IO)
+                .collect { name ->
+                    namesLiveData.value = capitalizeFirst(name)
+                    allNames.value!!.add(capitalizeFirst(name))
+                    allNames.value!!.sorted()
                 }
         }
-    }
 
+
+    }
+    private fun capitalizeFirst(it: String): String {
+        return it.replaceFirstChar {
+            if (it.isLowerCase()) it.titlecase(Locale.getDefault())
+            else it.toString()
+        }
+    }
 
 
 
