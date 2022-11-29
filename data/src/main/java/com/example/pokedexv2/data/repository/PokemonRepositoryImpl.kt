@@ -1,60 +1,53 @@
 package com.example.pokedexv2.data.repository
 
+import android.util.Log
+import com.example.domain.models.NameAndUrl
 import com.example.domain.models.PokemonDetails
 import com.example.domain.repository.PokemonRepository
 import com.example.pokedexv2.data.retrofit.RemoteDataSource
 import com.example.pokedexv2.data.storage.PokemonStorage
-import com.example.pokedexv2.data.storage.models.StoragePokemonDetails
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
+import com.example.pokedexv2.data.storage.models.StorageNameAndUrl
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 class PokemonRepositoryImpl @Inject constructor(
     private val pokemonStorage: PokemonStorage,
-    val remoteDataSource: RemoteDataSource
+    private val remoteDataSource: RemoteDataSource,
+    private val mapper: Mapper
 ) :
     PokemonRepository {
 
     override fun saveDetails(pokemonDetails: PokemonDetails) {
-        pokemonStorage.saveAll(mapToStorage(pokemonDetails))
+        pokemonStorage.saveAll(pokemonDetails = mapper.mapToStorageDetails(pokemonDetails = pokemonDetails))
     }
 
-    override fun getDetailsById(id: Long): PokemonDetails {
-        val pokemon = pokemonStorage.getDetailsById(id = id)
-        return mapToDomain(pokemon)
+    override suspend fun getDetailsByName(name: String): Flow<PokemonDetails> {
+//        val pokemonStorage = pokemonStorage.getDetailsById(name = name)
+//        return mapper.mapToDomain(storage = pokemonStorage)
+        return mapper.mapToDomainDetails(
+            remoteDataSource.loadInfo(
+                apiService = remoteDataSource.apiService,
+                name = name
+            )
+        ).asFlow()
+
     }
 
     override suspend fun getNamesRemote(): Flow<String> {
-
-        return remoteDataSource.loadNames(remoteDataSource.apiService).asFlow()
-
-
+        return remoteDataSource.loadNames(apiService = remoteDataSource.apiService).asFlow()
     }
 
-
-    private fun mapToDomain(storage: StoragePokemonDetails): PokemonDetails {
-        return PokemonDetails(
-            id = storage.id,
-            health = storage.health,
-            urlAddress = storage.urlAddress,
-            attack = storage.attack,
-            experience = storage.experience,
-            name = storage.name
-        )
+    override suspend fun getNamesSprites(): Flow<NameAndUrl> {
+        return mapper.mapToDomain(remoteDataSource.loadNamesSprites(apiService = remoteDataSource.apiService))
+            .asFlow()
     }
 
-    private fun mapToStorage(pokemon: PokemonDetails): StoragePokemonDetails {
-        return StoragePokemonDetails(
-            id = pokemon.id,
-            health = pokemon.health,
-            urlAddress = pokemon.urlAddress,
-            attack = pokemon.attack,
-            experience = pokemon.experience,
-            name = pokemon.name
-        )
+}
 
-    }
-
-
+private fun PokemonDetails.asFlow(): Flow<PokemonDetails> {
+    val list = mutableListOf(this)
+    return flow {
+        emitAll(list.asFlow())
+    }.flowOn(Dispatchers.IO)
 }

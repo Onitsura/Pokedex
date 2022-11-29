@@ -7,8 +7,8 @@ import com.example.pokedexv2.data.storage.models.StoragePokemonDetails
 
 @Dao
 interface StoragePokemonDetailsDao {
-    @Query("SELECT * FROM storagepokemondetails WHERE id = :id")
-    fun getById(id: Long): StoragePokemonDetails
+    @Query("SELECT * FROM storagepokemondetails WHERE name = :name")
+    fun getByName(name: String): StoragePokemonDetails
 
     @Insert
     fun insert(storagePokemonDetails: StoragePokemonDetails)

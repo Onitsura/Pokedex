@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.pokedexv2.R
 import com.example.pokedexv2.databinding.PokemonItemBinding
 
+
 class PokemonAdapter(pokemonList: MutableList<String>, private val listener: PokemonListener) :
     RecyclerView.Adapter<PokemonAdapter.PokemonHolder>() {
 
@@ -14,13 +15,13 @@ class PokemonAdapter(pokemonList: MutableList<String>, private val listener: Pok
 
 
     class PokemonHolder(item: View) : RecyclerView.ViewHolder(item) {
-        val binding = PokemonItemBinding.bind(item)
+        private val binding = PokemonItemBinding.bind(item)
 
         fun bind(pokemon: String, listener: PokemonListener) {
             binding.apply {
                 tvName.text = pokemon
 //                Picasso.get()
-//                    .load(pokemon.urlAddress)
+//                    .load()
 //                    .placeholder(R.drawable.pokepedia)
 //                    .error(R.drawable.ic_launcher_background)
 //                    .fit()
@@ -47,14 +48,14 @@ class PokemonAdapter(pokemonList: MutableList<String>, private val listener: Pok
         return pokemonListAdapter.size
     }
 
+
     fun update(newPokemonList: MutableList<String>) {
         pokemonListAdapter = newPokemonList
         notifyDataSetChanged()
     }
 
 
-
-    interface PokemonListener{
+    interface PokemonListener {
         fun onPokemonClicked(pokemon: String)
     }
 }

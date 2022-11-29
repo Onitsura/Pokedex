@@ -6,7 +6,7 @@ interface PokemonStorage {
 
     fun saveAll(pokemonDetails: StoragePokemonDetails)
 
-    fun getDetailsById(id: Long): StoragePokemonDetails
+    fun getDetailsById(name: String): StoragePokemonDetails
 
 
 }

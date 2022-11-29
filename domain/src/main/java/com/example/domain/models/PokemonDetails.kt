@@ -1,8 +1,6 @@
 package com.example.domain.models
 
 data class PokemonDetails(
-    val id: Long,
-
     val name: String,
 
     val attack: String,

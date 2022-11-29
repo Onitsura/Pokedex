@@ -2,13 +2,15 @@ package com.example.pokedexv2.presentation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import androidx.fragment.app.Fragment
 import com.example.pokedexv2.R
 import com.example.pokedexv2.databinding.ActivityMainBinding
 import com.example.pokedexv2.recyclerView.PokemonAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(), PokemonAdapter.PokemonListener {
+class MainActivity : AppCompatActivity() {
 
         lateinit var binding: ActivityMainBinding
 
@@ -32,7 +34,12 @@ class MainActivity : AppCompatActivity(), PokemonAdapter.PokemonListener {
                 .commit()
     }
 
-    override fun onPokemonClicked(pokemon: String) {
-
+    private fun initDetailsFragment(){
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.frgm_cont, DetailsFragment.newInstance())
+            .commit()
     }
+
+
 }

@@ -7,9 +7,9 @@ import androidx.room.PrimaryKey
 @Entity
 data class StoragePokemonDetails(
     @PrimaryKey
-    val id: Long,
-    @ColumnInfo(name = "name")
     val name: String,
+
+//    val id: Long,
 
     val attack: String,
 

@@ -1,5 +1,6 @@
 package com.example.pokedexv2.data.di
 
+import com.example.pokedexv2.data.repository.Mapper
 import com.example.pokedexv2.data.retrofit.ApiService
 import com.example.pokedexv2.data.retrofit.RemoteDataSource
 import dagger.Module
@@ -18,7 +19,7 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideClient(): OkHttpClient{
+    fun provideClient(): OkHttpClient {
         return OkHttpClient()
     }
 
@@ -36,12 +37,9 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideRemoteDataSource(apiService: ApiService): RemoteDataSource{
-        return RemoteDataSource(apiService = apiService)
+    fun provideRemoteDataSource(apiService: ApiService, mapper: Mapper): RemoteDataSource {
+        return RemoteDataSource(apiService = apiService, mapper = mapper)
     }
-
-
-
 
 
 }
