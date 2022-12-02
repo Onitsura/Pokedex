@@ -11,6 +11,11 @@ import com.example.pokedexv2.R
 import com.example.pokedexv2.databinding.FragmentDetailsBinding
 import com.squareup.picasso.Picasso
 
+private const val HEALTH = "Health: "
+private const val ATTACK = "Attack: "
+private const val EXPERIENCE = "Exp: "
+
+
 class DetailsFragment : Fragment() {
 
     private lateinit var binding: FragmentDetailsBinding
@@ -48,16 +53,16 @@ class DetailsFragment : Fragment() {
     private fun init() {
         binding.apply {
             viewModel.attack.observe(viewLifecycleOwner) {
-                Log.e("otdelno", it)
-                attackDetails.text = it
+                val text = ATTACK + it
+                attackDetails.text = text
             }
             viewModel.experience.observe(viewLifecycleOwner) {
-                Log.e("otdelno", it)
-                experienceDetails.text = it
+                val text = EXPERIENCE + it
+                experienceDetails.text = text
             }
             viewModel.health.observe(viewLifecycleOwner) {
-                Log.e("otdelno", it)
-                healthDetails.text = it
+                val text = HEALTH + it
+                healthDetails.text = text
             }
             viewModel.urlAddress.observe(viewLifecycleOwner) {
                 Log.e("otdelno", it)
@@ -67,6 +72,9 @@ class DetailsFragment : Fragment() {
                     .error(R.drawable.ic_launcher_background)
                     .fit()
                     .into(spriteDetails)
+            }
+            viewModel.name.observe(viewLifecycleOwner){
+                nameDetails.text = it
             }
 
             backBtn.setOnClickListener {
@@ -79,8 +87,8 @@ class DetailsFragment : Fragment() {
 //                    .commit();
 
 
-                val manager = requireActivity().supportFragmentManager
-                manager.popBackStack()
+                requireActivity().supportFragmentManager
+                    .popBackStack()
                 parentFragmentManager.beginTransaction()
                     .replace(R.id.frgm_cont, NamesListFragment.newInstance())
                     .commit()

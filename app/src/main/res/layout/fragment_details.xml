@@ -24,77 +24,9 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="0.0"
+             />
 
-        <TextView
-            android:id="@+id/experienceDetails"
-            android:layout_width="110dp"
-            android:layout_height="36dp"
-            android:layout_marginStart="70dp"
-            android:layout_marginTop="89dp"
-            android:layout_marginEnd="283dp"
-            android:layout_marginBottom="364dp"
-            android:gravity="center"
-            android:hint="Experience"
-            android:text="exp"
-            android:textSize="24sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spriteDetails"
-            app:layout_constraintVertical_bias="1.0" />
-
-        <TextView
-            android:id="@+id/attackDetails"
-            android:layout_width="110dp"
-            android:layout_height="36dp"
-            android:layout_marginStart="70dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="283dp"
-            android:layout_marginBottom="316dp"
-            android:gravity="center"
-            android:hint="Attack"
-            android:textSize="24sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/experienceDetails" />
-
-        <TextView
-            android:id="@+id/healthDetails"
-            android:layout_width="110dp"
-            android:layout_height="36dp"
-            android:layout_marginStart="70dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="283dp"
-            android:layout_marginBottom="253dp"
-            android:gravity="center"
-            android:hint="Health"
-            android:textSize="24sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/attackDetails"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <TextView
-            android:id="@+id/nameDetails"
-            android:layout_width="71dp"
-            android:layout_height="20dp"
-            android:layout_marginStart="175dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginEnd="178dp"
-            android:layout_marginBottom="423dp"
-            android:gravity="center"
-            android:hint="Name"
-            android:text="name"
-            android:textSize="24sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spriteDetails"
-            app:layout_constraintVertical_bias="0.0" />
 
         <Button
             android:id="@+id/backBtn"
@@ -104,27 +36,82 @@
             android:layout_marginTop="273dp"
             android:layout_marginEnd="152dp"
             android:layout_marginBottom="93dp"
-            android:text="Back"
+            android:text="@string/backButton"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/nameDetails"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toBottomOf="@+id/spriteDetails"
+            app:layout_constraintVertical_bias="1.0" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/nameDetails"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="91dp"
-            android:layout_marginTop="189dp"
-            android:layout_marginEnd="109dp"
-            android:layout_marginBottom="115dp"
-            android:text="TextView"
+            android:gravity="center"
+            android:text=""
+            android:textSize="34sp"
             app:layout_constraintBottom_toTopOf="@+id/backBtn"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/healthDetails"
-            app:layout_constraintTop_toBottomOf="@+id/spriteDetails" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spriteDetails"
+            app:layout_constraintVertical_bias="0.123" />
+
+        <TextView
+            android:id="@+id/experienceDetails"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:gravity="center"
+            android:text="@string/exp"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.123"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spriteDetails"
+            app:layout_constraintVertical_bias="0.204" />
+
+        <TextView
+            android:id="@+id/attackDetails"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:text="@string/attack"
+            android:gravity="center"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.122"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/experienceDetails"
+            app:layout_constraintVertical_bias="0.059" />
+
+        <TextView
+            android:id="@+id/healthDetails"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:text="@string/health"
+            android:gravity="center"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.124"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/attackDetails"
+            app:layout_constraintVertical_bias="0.071" />
+
+        <TextView
+            android:id="@+id/something"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:text=""
+            android:gravity="center"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.124"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/healthDetails"
+            app:layout_constraintVertical_bias="0.1" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
