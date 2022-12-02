@@ -27,12 +27,10 @@ class NamesListFragment : Fragment(), PokemonAdapter.PokemonListener {
 
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentNamesListBinding.inflate(inflater)
         binding.apply {
-            Log.e("Frgm", viewModel.allNames.value.toString())
             if (viewModel.allNames.value!!.isNotEmpty()) {
                 rcView.layoutManager = GridLayoutManager(layoutInflater.context, 2)
                 val namesList = viewModel.allNames.value!!
@@ -43,17 +41,12 @@ class NamesListFragment : Fragment(), PokemonAdapter.PokemonListener {
                 searchBar.addTextChangedListener(object : TextWatcher {
                     override fun afterTextChanged(s: Editable?) {}
                     override fun beforeTextChanged(
-                        s: CharSequence?,
-                        start: Int,
-                        count: Int,
-                        after: Int
+                        s: CharSequence?, start: Int, count: Int, after: Int
                     ) {
                     }
 
                     override fun onTextChanged(
-                        s: CharSequence?,
-                        start: Int,
-                        before: Int, count: Int
+                        s: CharSequence?, start: Int, before: Int, count: Int
                     ) {
                         search(searchBar, adapter)
 
@@ -76,24 +69,18 @@ class NamesListFragment : Fragment(), PokemonAdapter.PokemonListener {
 
 
     private fun init() {
-        Log.e("Frgm", "Recreate")
         binding.apply {
 
             //Searchbar
             searchBar.addTextChangedListener(object : TextWatcher {
                 override fun afterTextChanged(s: Editable?) {}
                 override fun beforeTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    count: Int,
-                    after: Int
+                    s: CharSequence?, start: Int, count: Int, after: Int
                 ) {
                 }
 
                 override fun onTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    before: Int, count: Int
+                    s: CharSequence?, start: Int, before: Int, count: Int
                 ) {
                     search(searchBar, adapter)
 
@@ -123,21 +110,15 @@ class NamesListFragment : Fragment(), PokemonAdapter.PokemonListener {
     override fun onPokemonClicked(pokemon: String) {
 
         binding.apply {
-            Log.e("trans1", pokemon)
+
 
             viewModel.nameClicked.value = pokemon
+            val id = viewModel.getId(pokemon)
 
-
-
-            setFragmentResult("pokemon", bundleOf("bundle" to pokemon.replaceFirstChar {
-                it.lowercase(
-                    Locale.getDefault()
-                )
-            }))
+            setFragmentResult("pokemonId", bundleOf("bundle" to id))
 
             parentFragmentManager.beginTransaction()
-                .replace(R.id.frgm_cont, DetailsFragment.newInstance())
-                .addToBackStack("Names")
+                .replace(R.id.frgm_cont, DetailsFragment.newInstance()).addToBackStack("Names")
                 .commit()
         }
     }
@@ -146,12 +127,10 @@ class NamesListFragment : Fragment(), PokemonAdapter.PokemonListener {
     //Метод для поиска по списку
     fun search(view: EditText, adapter: PokemonAdapter) {
         val s = view.text
-        viewModel.allNames.observe(viewLifecycleOwner) {
+        viewModel.allNames.observe(viewLifecycleOwner) { it ->
             if (s?.length == 0) {
-                // Пользователь очистил поле поиска. Показываем все предметы
                 adapter.pokemonListAdapter = it.sorted() as MutableList<String>
             } else {
-                // Пользователь что-то ввёл. Делаем поиск по этому запросу
                 adapter.pokemonListAdapter = it.filter {
                     it.contains(s.toString(), true)
                 } as ArrayList
@@ -159,18 +138,6 @@ class NamesListFragment : Fragment(), PokemonAdapter.PokemonListener {
             adapter.notifyDataSetChanged()
         }
     }
-
-
-//    private fun loadImage(urlAddress: String) {
-//
-//            Picasso.get()
-//                .load(urlAddress)
-//                .placeholder(R.drawable.ic_launcher_foreground)
-//                .error(R.drawable.ic_launcher_background)
-//                .fit()
-//                .into()
-//        }
-
 }
 
 

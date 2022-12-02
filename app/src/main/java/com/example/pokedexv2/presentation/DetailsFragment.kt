@@ -28,8 +28,7 @@ class DetailsFragment : Fragment() {
 
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentDetailsBinding.inflate(inflater)
         return binding.root
@@ -38,11 +37,9 @@ class DetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         parentFragmentManager.setFragmentResultListener(
-            "pokemon",
-            viewLifecycleOwner
+            "pokemonId", viewLifecycleOwner
         ) { pokemon, bundle ->
-            viewModel.name.value = bundle.getString("bundle").toString()
-            Log.e("trans2", viewModel.name.value.toString())
+            viewModel.id.value = bundle.getLong("bundle")
             viewModel.load()
         }
         init()
@@ -65,36 +62,17 @@ class DetailsFragment : Fragment() {
                 healthDetails.text = text
             }
             viewModel.urlAddress.observe(viewLifecycleOwner) {
-                Log.e("otdelno", it)
-                Picasso.get()
-                    .load(it)
-                    .placeholder(R.drawable.ic_launcher_foreground)
-                    .error(R.drawable.ic_launcher_background)
-                    .fit()
-                    .into(spriteDetails)
+                Picasso.get().load(it).placeholder(R.drawable.ic_launcher_foreground)
+                    .error(R.drawable.ic_launcher_background).fit().into(spriteDetails)
             }
-            viewModel.name.observe(viewLifecycleOwner){
+            viewModel.name.observe(viewLifecycleOwner) {
                 nameDetails.text = it
             }
-
             backBtn.setOnClickListener {
-//                FragmentManager fragmentManager = getFragmentManager()
-//                fragmentManager.beginTransaction()
-//                    .remove(fragment1)
-//                    .add(R.id.fragment_container, fragment2)
-//                    .show(fragment3)
-//                    .hide(fragment4)
-//                    .commit();
-
-
-                requireActivity().supportFragmentManager
-                    .popBackStack()
+                requireActivity().supportFragmentManager.popBackStack()
                 parentFragmentManager.beginTransaction()
-                    .replace(R.id.frgm_cont, NamesListFragment.newInstance())
-                    .commit()
+                    .replace(R.id.frgm_cont, NamesListFragment.newInstance()).commit()
             }
         }
     }
-
-
 }

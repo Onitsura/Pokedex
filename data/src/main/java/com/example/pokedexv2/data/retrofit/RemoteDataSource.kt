@@ -1,57 +1,39 @@
 package com.example.pokedexv2.data.retrofit
 
 import android.util.Log
+import com.example.domain.models.NameAndId
 import com.example.pokedexv2.data.repository.Mapper
-import com.example.pokedexv2.data.retrofit.models.PokemonDetailsById
 import com.example.pokedexv2.data.retrofit.models.PokemonEntries
-import com.example.pokedexv2.data.retrofit.models.PokemonNameAndId
-import com.example.pokedexv2.data.storage.models.StorageNameAndUrl
 import com.example.pokedexv2.data.storage.models.StoragePokemonDetails
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.util.*
 import javax.inject.Inject
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
+
 
 class RemoteDataSource @Inject constructor(val apiService: ApiService, private val mapper: Mapper) {
 
 
-    suspend fun loadNames(apiService: ApiService): MutableList<String> {
+    suspend fun loadNames(apiService: ApiService): MutableList<NameAndId> {
         val names: MutableList<String> = mutableListOf()
+        val nameAndId: MutableList<NameAndId> = mutableListOf()
         val receive: List<PokemonEntries> = (apiService.getNames().pokemon_entries)
         receive.map {
             names.add(it.species.name)
         }
-        return names
+        receive.map{
+            nameAndId.add(NameAndId(name = it.species.name, id = it.entry_number))
+        }
+        return nameAndId
     }
 
 
     suspend fun loadInfo(
         apiService: ApiService,
-        name: String
+        id: Long
     ): StoragePokemonDetails {
-        return mapper.mapToPokemon(apiService.getDetailsById(name))
+        return mapper.mapToPokemon(apiService.getDetailsById(id = id))
     }
 
 
-    suspend fun loadNamesSprites(apiService: ApiService): MutableList<StorageNameAndUrl> {
-        val map: MutableList<StorageNameAndUrl> = mutableListOf()
-        val receive: List<PokemonEntries> = (apiService.getNames().pokemon_entries)
-        receive.map {
-            map.add(
-                StorageNameAndUrl(
-                    name = it.species.name,
-                    urlAddress = loadInfo(apiService, it.species.name).urlAddress
-                )
-            )
-            Log.e("Flow", map.size.toString())
-        }
-        return map
-    }
+
 
 
 }

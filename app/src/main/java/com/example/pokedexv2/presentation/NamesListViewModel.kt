@@ -4,14 +4,12 @@ package com.example.pokedexv2.presentation
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
+import com.example.domain.models.NameAndId
 import com.example.domain.repository.PokemonRepository
 import com.example.domain.usecase.GetPokemonsNamesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import java.util.*
@@ -25,39 +23,33 @@ class NamesListViewModel @Inject constructor(private val getPokemonsNamesUseCase
     val namesLiveData: MutableLiveData<String> = MutableLiveData()
     val urlLiveData: MutableLiveData<String> = MutableLiveData()
     val nameClicked: MutableLiveData<String> = MutableLiveData()
+    private val nameAndId: MutableMap<String, Long> = mutableMapOf()
+
+
+
+
 
 
     init {
         viewModelScope.launch {
-
-            pokemonRepository.getNamesRemote()
-                .flowOn(Dispatchers.IO)
-                .collect { name ->
-                    namesLiveData.value = name
-                    allNames.value!!.add(capitalizeFirst(name))
-                    allNames.value!!.sorted()
-
-
-                }
-
-
-
-            //Метод по получению урл и имени
-
-
+            pokemonRepository.getNamesRemote().flowOn(Dispatchers.IO).collect { it: NameAndId ->
+                namesLiveData.value = it.name
+                nameAndId[it.name] = it.id
+                allNames.value!!.add(capitalizeFirst(it.name))
+                allNames.value!!.sorted()
+            }
         }
     }
 
 
 
-    fun getSprite(pokemon: String){
-        viewModelScope.launch {
-            pokemonRepository.getDetailsByName(pokemon)
-                .flowOn(Dispatchers.IO)
-                .collect {
-                    urlLiveData.value = it.urlAddress
-                }
+    fun getId(name: String): Long{
+        var a: Long = 0
+        if(nameAndId.containsKey(name.replaceFirstChar { it.lowercase(Locale.getDefault()) })){
+            a = nameAndId[name.replaceFirstChar { it.lowercase(Locale.getDefault()) }]!!.toLong()
         }
+
+     return a
     }
 
 
@@ -68,26 +60,13 @@ class NamesListViewModel @Inject constructor(private val getPokemonsNamesUseCase
             else it.toString()
         }
     }
-    private fun decapitalizeFirst(it: String): String{
+
+    private fun decapitalizeFirst(it: String): String {
         return it.replaceFirstChar {
             if (it.isTitleCase()) it.lowercase(Locale.getDefault())
             else it.toString()
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }
